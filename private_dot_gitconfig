@@ -1,0 +1,20 @@
+[user]
+	email = erwanleboucher@gmail.com
+	name = Erwan Leboucher
+	signingkey = E191CC9EB650480E
+[commit]
+	gpgsign = true
+[pull]
+	rebase = true
+[init]
+	defaultBranch = main
+[push]
+	autoSetupRemote = true
+[rerere]
+	enabled = true
+[fetch]
+	prune = true
+[tag]
+	gpgSign = false
+[core]
+	excludesfile = /home/erwanleboucher/.gitignore

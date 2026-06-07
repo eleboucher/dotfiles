@@ -1,0 +1,13 @@
+# Contains live tokens (fish universal variables)
+.config/fish/fish_variables
+
+# Machine-local Claude Code settings
+.claude/settings.local.json
+.config/fish/.claude
+
+# Embedded git repo (LazyVim starter clone)
+.config/nvim/.git
+
+# Managed by caelestia (symlinks)
+.config/foot
+.config/uwsm
