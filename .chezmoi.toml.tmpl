@@ -1,0 +1,9 @@
+encryption = "age"
+[add]
+    secrets = "error"
+[age]
+    identity = "{{ .chezmoi.homeDir }}/.config/sops/age/keys.txt"
+    recipient = "age120vrfse9e0hexvlr70rensn2myph7r0n9yevr5dvgur0l8gf2dxqpmut7v"
+[git]
+    autoCommit = true
+    autoPush = true
