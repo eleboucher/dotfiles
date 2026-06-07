@@ -2445,13 +2445,36 @@
             "enabled": true,
             "keys": [
                 {
-                    "key": "F",
+                    "key": "G",
                     "modifiers": [
                         "SUPER"
                     ]
                 }
             ],
             "name": "Open File Explorer"
+        },
+        {
+            "actions": [
+                {
+                    "args": {
+                        "dispatcher": "movetoworkspace",
+                        "argument": "emptym",
+                        "flags": ""
+                    },
+                    "id": "legacy.dispatcher",
+                    "layouts": []
+                }
+            ],
+            "enabled": true,
+            "keys": [
+                {
+                    "key": "F",
+                    "modifiers": [
+                        "SUPER"
+                    ]
+                }
+            ],
+            "name": "Move Window to Empty Workspace"
         }
     ],
     "defaultAmbxstBinds": {
