@@ -17,7 +17,3 @@ README.md
 
 # Embedded git repo (LazyVim starter clone)
 .config/nvim/.git
-
-# Managed by caelestia (symlinks)
-.config/foot
-.config/uwsm
