@@ -3,13 +3,22 @@
   "mcp": {
     "homelab": {
       "type": "remote",
-      "url": "https://mcp-internal.erwanleboucher.dev/mcp",
-      "enabled": true
+      "url": "https://litellm.erwanleboucher.dev/mcp/",
+      "enabled": true,
+      "oauth": false,
+      "headers": {
+        "Authorization": "Bearer {env:LITELLM_API_KEY}",
+        "x-litellm-api-key": "Bearer {env:LITELLM_API_KEY}"
+      }
     },
     "playwright": {
       "type": "local",
       "enabled": true,
-      "command": ["npx", "@playwright/mcp@latest", "--browser=chromium"]
+      "command": [
+        "npx",
+        "@playwright/mcp@latest",
+        "--browser=chromium"
+      ]
     },
     "open-design": {
       "type": "local",
@@ -26,11 +35,17 @@
     }
   },
   "lsp": true,
+  "plugin": [
+    "../dev/memini/integrations/opencode/plugin/memini.js",
+    "oh-my-opencode-slim"
+  ],
   "provider": {
     "litellm": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "LiteLLM (local + cloud pool)",
-      "env": ["LITELLM_API_KEY"],
+      "env": [
+        "LITELLM_API_KEY"
+      ],
       "options": {
         "baseURL": "https://litellm.erwanleboucher.dev/v1",
         "apiKey": "{env:LITELLM_API_KEY}"
@@ -44,8 +59,28 @@
           },
           "tool_call": true,
           "modalities": {
-            "input": ["text"],
-            "output": ["text"]
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
+          }
+        },
+        "neuralwatt/glm-5.2": {
+          "name": "neuralwatt/glm-5.2",
+          "limit": {
+            "context": 1048560,
+            "output": 131072
+          },
+          "tool_call": true,
+          "modalities": {
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
           }
         },
         "glm-5-turbo": {
@@ -56,8 +91,12 @@
           },
           "tool_call": true,
           "modalities": {
-            "input": ["text"],
-            "output": ["text"]
+            "input": [
+              "text"
+            ],
+            "output": [
+              "text"
+            ]
           }
         },
         "neuralwatt/qwen3.6-35b": {
@@ -68,8 +107,13 @@
           },
           "tool_call": true,
           "modalities": {
-            "input": ["text", "image"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
           }
         }
       }
@@ -77,7 +121,9 @@
     "litellm-anthropic": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "LiteLLM Anthropic-format (Minimax M3)",
-      "env": ["LITELLM_API_KEY"],
+      "env": [
+        "LITELLM_API_KEY"
+      ],
       "options": {
         "baseURL": "https://litellm.erwanleboucher.dev/v1",
         "apiKey": "{env:LITELLM_API_KEY}"
@@ -91,8 +137,13 @@
           },
           "tool_call": true,
           "modalities": {
-            "input": ["text", "image"],
-            "output": ["text"]
+            "input": [
+              "text",
+              "image"
+            ],
+            "output": [
+              "text"
+            ]
           }
         }
       }
@@ -102,33 +153,51 @@
     "coordinator": {
       "description": "Reasoning coordinator — plans, then delegates to role subagents (explorer/fixer/oracle/reviewer)",
       "mode": "primary",
-      "model": "litellm/glm-5.2",
-      "prompt": "You are a coordinator. Do the high-level reasoning and synthesis yourself; delegate the legwork to role subagents via the task tool.\n\nROLES:\n- `explorer` (cloud glm-5-turbo — cheap, parallel-safe): codebase recon, search, 'where/how is X', read-only. Fan these out when you need speed.\n- `fixer` (cloud neuralwatt/qwen3.6-35b — Qwen3.6-35B, 131k, vision): scoped implementation and edits. Your default code executor; the Qwen coder lane.\n- `fixer-bigctx` (Minimax M3, Anthropic-format — 1M, vision): implementation needing >131k context or vision with the strongest general model; weaker coder than `fixer` but bigger context and different family.\n- `oracle` (cloud glm-5.2 — 1M, strongest reasoning tier): hard debugging, root-cause, architecture. Read-mostly; return analysis, don't sprawl into edits.\n- `reviewer` (Minimax M3, Anthropic-format — different family from GLM/Qwen): independent second opinion and creative/prose.\n\nPARALLEL CODING: prefer `fixer` for the most important work, fan the bulk of concurrent tasks onto `fixer-bigctx` (cloud, vision + 1M ctx), and only spill overflow to `explorer` (its glm-5-turbo backend is cheap and parallel-safe) once other lanes are saturated.\n\nCOUNCIL (high-stakes review): get independent verdicts from two different model families — `reviewer` (Minimax) plus `fixer` (Qwen) — then reconcile. Never let one model grade its own work."
+      "model": "litellm/neuralwatt/glm-5.2",
+      "options": {
+        "reasoning_effort": "max"
+      },
+      "prompt": "You are a coordinator. Do the high-level reasoning and synthesis yourself; delegate the legwork to role subagents via the task tool.\n\nROLES:\n- `explorer` (cloud glm-5-turbo — cheap, parallel-safe): codebase recon, search, 'where/how is X', read-only. Fan these out when you need speed.\n- `fixer` (cloud neuralwatt/qwen3.6-35b — Qwen3.6-35B, 131k, vision): scoped implementation and edits. Your default code executor; the Qwen coder lane.\n- `fixer-bigctx` (Minimax M3, Anthropic-format — 1M, vision): implementation needing >131k context or vision with the strongest general model; weaker coder than `fixer` but bigger context and different family.\n- `oracle` (cloud neuralwatt/glm-5.2 — 1M, strongest reasoning tier; Z.AI fallback on error): hard debugging, root-cause, architecture. Read-mostly; return analysis, don't sprawl into edits.\n- `reviewer` (Minimax M3, Anthropic-format — different family from GLM/Qwen): independent second opinion and creative/prose.\n\nPARALLEL CODING: prefer `fixer` for the most important work, fan the bulk of concurrent tasks onto `fixer-bigctx` (cloud, vision + 1M ctx), and only spill overflow to `explorer` (its glm-5-turbo backend is cheap and parallel-safe) once other lanes are saturated.\n\nCOUNCIL (high-stakes review): get independent verdicts from two different model families — `reviewer` (Minimax) plus `fixer` (Qwen) — then reconcile. Never let one model grade its own work."
     },
     "explorer": {
       "description": "Recon — codebase scouting, search, 'where/how is X', read-only. Cloud (glm-5-turbo, 200k): cheap and parallel-safe, fan out freely for speed, if local slots are busy",
       "mode": "subagent",
-      "model": "litellm/glm-5-turbo"
+      "model": "litellm/glm-5-turbo",
+      "options": {
+        "reasoning_effort": "minimal"
+      }
     },
     "fixer": {
       "description": "Scoped implementation — neuralwatt/qwen3.6-35b (Qwen3.6-35B, 131k, vision). The default code executor; the cloud Qwen coder lane — prefer it for the most important work",
       "mode": "subagent",
-      "model": "litellm/neuralwatt/qwen3.6-35b"
+      "model": "litellm/neuralwatt/qwen3.6-35b",
+      "options": {
+        "reasoning_effort": "high"
+      }
     },
     "fixer-bigctx": {
       "description": "Bigctx / vision overflow — Minimax M3 (Anthropic-format, 1M, vision). Use when context exceeds 131k or for tasks needing the strongest general model; weaker coder than `fixer` but bigger context and different family",
       "mode": "subagent",
-      "model": "litellm-anthropic/MiniMax-M3"
+      "model": "litellm-anthropic/MiniMax-M3",
+      "options": {
+        "reasoning_effort": "high"
+      }
     },
     "oracle": {
-      "description": "Hard debugging / architecture — glm-5.2 (1M, strongest reasoning tier). Read-mostly deep analysis; return a recommendation, don't sprawl into edits",
+      "description": "Hard debugging / architecture — neuralwatt/glm-5.2 (1M, strongest reasoning tier; Z.AI fallback on error). Read-mostly deep analysis; return a recommendation, don't sprawl into edits",
       "mode": "subagent",
-      "model": "litellm/glm-5.2"
+      "model": "litellm/neuralwatt/glm-5.2",
+      "options": {
+        "reasoning_effort": "max"
+      }
     },
     "reviewer": {
       "description": "Independent review / creative — Minimax M3 (Anthropic-format, 1M, different family from GLM/Qwen). Second opinions and prose.",
       "mode": "subagent",
-      "model": "litellm-anthropic/MiniMax-M3"
+      "model": "litellm-anthropic/MiniMax-M3",
+      "options": {
+        "reasoning_effort": "high"
+      }
     }
   }
 }
