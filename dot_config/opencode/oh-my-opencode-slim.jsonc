@@ -1,0 +1,120 @@
+{
+  "$schema": "https://unpkg.com/oh-my-opencode-slim@latest/oh-my-opencode-slim.schema.json",
+
+  // Active preset: routes every agent through the user's LiteLLM proxy
+  "preset": "litellm",
+
+  // Enable Observer (vision agent) — the GLM-5.2 orchestrator is not multimodal,
+  // so Observer gives the pantheon a dedicated visual reader (MiniMax M3, vision).
+  "disabled_agents": [],
+
+  "presets": {
+    "litellm": {
+      // Master delegator + strategic coordinator — strongest reasoning model.
+      "orchestrator": {
+        "model": "litellm/neuralwatt/glm-5.2",
+        "variant": "max",
+        "options": { "reasoning_effort": "max" },
+        "skills": ["*"],
+        "mcps": ["*", "!context7"]
+      },
+      // Strategic advisor / hard debugging of last resort — strongest reasoning.
+      "oracle": {
+        "model": "litellm/neuralwatt/glm-5.2",
+        "variant": "max",
+        "options": { "reasoning_effort": "max" },
+        "skills": ["simplify"],
+        "mcps": []
+      },
+      // Multi-LLM consensus synthesis — strong reasoning to reconcile councillors.
+      "council": {
+        "model": "litellm/neuralwatt/glm-5.2",
+        "variant": "high",
+        "options": { "reasoning_effort": "high" },
+        "skills": [],
+        "mcps": []
+      },
+      // External knowledge retrieval — fast and cheap.
+      "librarian": {
+        "model": "litellm/glm-5-turbo",
+        "variant": "low",
+        "options": { "reasoning_effort": "low" },
+        "skills": [],
+        "mcps": ["websearch", "context7", "gh_grep"]
+      },
+      // Codebase reconnaissance — fast and cheap, fan out freely.
+      "explorer": {
+        "model": "litellm/glm-5-turbo",
+        "variant": "low",
+        "options": { "reasoning_effort": "low" },
+        "skills": [],
+        "mcps": []
+      },
+      // UI/UX implementation — GLM-5.2 (text-only; no vision via GLM).
+      "designer": {
+        "model": "litellm/neuralwatt/glm-5.2",
+        "variant": "medium",
+        "options": { "reasoning_effort": "medium" },
+        "skills": [],
+        "mcps": []
+      },
+      // Scoped implementation — Qwen3.6-35B coder lane.
+      "fixer": {
+        "model": "litellm/neuralwatt/qwen3.6-35b",
+        "variant": "high",
+        "options": { "reasoning_effort": "high" },
+        "skills": [],
+        "mcps": []
+      },
+      // Read-only visual analysis — MiniMax M3 is vision-capable.
+      "observer": {
+        "model": "litellm-anthropic/MiniMax-M3",
+        "variant": "high",
+        "options": { "reasoning_effort": "high" },
+        "skills": [],
+        "mcps": []
+      }
+    }
+  },
+
+  // Council: three diverse model families for cross-family consensus.
+  // The council agent (synthesis) is GLM-5.2; councillors run in parallel.
+  "council": {
+    "presets": {
+      "default": {
+        "glm": {
+          "model": "litellm/neuralwatt/glm-5.2",
+          "variant": "high"
+        },
+        "minimax": {
+          "model": "litellm-anthropic/MiniMax-M3",
+          "variant": "high"
+        },
+        "qwen": {
+          "model": "litellm/neuralwatt/qwen3.6-35b",
+          "variant": "high"
+        }
+      }
+    },
+    "default_preset": "default"
+  },
+
+  // Custom agents preserved from the user's previous opencode.json setup.
+  // These are non-conflicting specialist lanes the orchestrator can delegate to.
+  "agents": {
+    "fixer-bigctx": {
+      "model": "litellm-anthropic/MiniMax-M3",
+      "variant": "high",
+      "options": { "reasoning_effort": "high" },
+      "prompt": "You are fixer-bigctx, a scoped implementation specialist for work that exceeds 131k context or needs the strongest general multimodal model. You run on MiniMax M3 (Anthropic-format, 1M context, vision). You are a weaker coder than the primary fixer (Qwen) but have a larger context window and a different model family. Use for: large-file edits, vision-driven implementation, and overflow when fixer lanes are saturated.",
+      "orchestratorPrompt": "@fixer-bigctx\n- Role: Big-context / vision implementation overflow specialist (MiniMax M3, 1M, vision)\n- **Delegate when:** context exceeds 131k • vision-driven implementation tasks • when fixer lanes are saturated and more parallel coding capacity is needed\n- **Don't delegate when:** standard-sized scoped edits (prefer fixer) • pure reasoning/architecture (prefer oracle) • read-only recon (prefer explorer)"
+    },
+    "reviewer": {
+      "model": "litellm-anthropic/MiniMax-M3",
+      "variant": "high",
+      "options": { "reasoning_effort": "high" },
+      "prompt": "You are reviewer, an independent code review and creative specialist. You run on MiniMax M3 (Anthropic-format, 1M, vision), a different model family from GLM/Qwen. Use for: independent second opinions, code review, creative writing, and documentation prose. Never let one model family grade its own work — your value is cross-family diversity.",
+      "orchestratorPrompt": "@reviewer\n- Role: Independent review and creative specialist (MiniMax M3, different family from GLM/Qwen)\n- **Delegate when:** code review needs a second opinion • creative/prose tasks • high-stakes review (pair with fixer or oracle for cross-family consensus)\n- **Don't delegate when:** implementation (prefer fixer) • architecture decisions (prefer oracle) • recon (prefer explorer)"
+    }
+  }
+}
