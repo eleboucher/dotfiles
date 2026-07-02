@@ -85,5 +85,8 @@ Don't pin a tool to whatever happens to be on your machine — check what's curr
 - Never run `git push` (or `git push --force`, `gh pr merge`, or anything else that updates a remote) without an explicit instruction in the current turn. A prior "commit and push" authorization covers exactly one push and does not carry forward.
 - Never add `Co-Authored-By` (or any other co-author trailer) to commit messages unless the user explicitly asks for it in the current turn. Write commits with just the subject and body.
 - Safe by default: `git add`, `git commit`, `git status`, `git diff`, `git log`, branch creation.
+- use title only commit unless told otherwise
 
 Never add AI SLOPS
+
+always verify docs with context7 mcp
