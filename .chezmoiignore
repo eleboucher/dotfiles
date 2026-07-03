@@ -17,3 +17,6 @@ README.md
 
 # Embedded git repo (LazyVim starter clone)
 .config/nvim/.git
+
+# Noctalia-generated theme template (regenerated on theme change)
+.config/hypr/noctalia.conf

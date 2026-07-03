@@ -1,7 +1,7 @@
 # dotfiles
 
 Personal dotfiles, managed with [chezmoi](https://www.chezmoi.io/).
-Hyprland + caelestia/Ambxst, fish, ghostty, neovim (LazyVim), k9s.
+Hyprland + Noctalia, fish, ghostty, neovim (LazyVim), k9s.
 
 Secrets (SSH keys, kubeconfig, talos config) are encrypted with
 [age](https://age-encryption.org/). The age key is **not** in this repo.

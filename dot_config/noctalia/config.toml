@@ -1,0 +1,10 @@
+[shell]
+shared_gl_context = false  # NVIDIA: shared EGL context segfaults at bar render
+
+[shell.panel]
+transparency_mode = "glass"
+
+[theme]
+mode           = "dark"
+source         = "custom"
+custom_palette = "erwanleboucher-dev"
