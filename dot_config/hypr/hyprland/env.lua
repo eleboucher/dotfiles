@@ -1,0 +1,28 @@
+-- Environment variables
+
+-- Themes
+hl.env("QT_QPA_PLATFORMTHEME", "qtengine")
+hl.env("QT_WAYLAND_DISABLE_WINDOWDECORATION", "1")
+hl.env("QT_AUTO_SCREEN_SCALE_FACTOR", "1")
+hl.env("XCURSOR_THEME", "sweet-cursors")
+hl.env("XCURSOR_SIZE", "24")
+
+-- Toolkit backends
+hl.env("GDK_BACKEND", "wayland,x11")
+hl.env("QT_QPA_PLATFORM", "wayland;xcb")
+hl.env("SDL_VIDEODRIVER", "wayland,x11,windows")
+hl.env("CLUTTER_BACKEND", "wayland")
+hl.env("ELECTRON_OZONE_PLATFORM_HINT", "auto")
+
+-- XDG specifications
+hl.env("XDG_CURRENT_DESKTOP", "Hyprland")
+hl.env("XDG_SESSION_TYPE", "wayland")
+hl.env("XDG_SESSION_DESKTOP", "Hyprland")
+
+-- Others
+hl.env("_JAVA_AWT_WM_NONREPARENTING", "1")
+
+-- NVIDIA VA-API video decode (Firefox)
+hl.env("LIBVA_DRIVER_NAME", "nvidia")
+hl.env("NVD_BACKEND", "direct")
+hl.env("MOZ_DISABLE_RDD_SANDBOX", "1")
