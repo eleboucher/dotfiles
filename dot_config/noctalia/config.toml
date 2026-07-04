@@ -4,6 +4,9 @@ shared_gl_context = false  # NVIDIA: shared EGL context segfaults at bar render
 [shell.panel]
 transparency_mode = "glass"
 
+[bar.default]
+layer = "top"  # sits below fullscreen windows so they auto-hide the bar (overlay stays on top)
+
 [theme]
 mode           = "dark"
 source         = "custom"
