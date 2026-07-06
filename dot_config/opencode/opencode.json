@@ -32,7 +32,11 @@
   },
   "lsp": true,
   "formatter": true,
-
+  "permission": {
+    "external_directory": {
+      "~/dev/**": "allow"
+    }
+  },
   "plugin": ["@eleboucher/opencode-memini", "oh-my-opencode-slim"],
   "provider": {
     "litellm": {

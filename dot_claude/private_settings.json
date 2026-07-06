@@ -2,7 +2,12 @@
   "env": {
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0"
   },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "claude-fable-5[1m]",
   "hooks": {},
+  "enableArtifact": false,
   "statusLine": {
     "type": "command",
     "command": "bunx -y ccstatusline@latest",
