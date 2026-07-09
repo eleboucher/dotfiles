@@ -1,7 +1,7 @@
 k9s:
   cluster: homelab
   namespace:
-    active: default
+    active: all
     lockFavorites: false
     favorites:
       - all
@@ -9,12 +9,12 @@ k9s:
       - kube-system
       - system-upgrade
       - network
-      - volsync-system
       - matrix
       - dragonfly-system
       - home-assistant
+      - volsync-system
   view:
-    active: v1/pods
+    active: v1/services all
   featureGates:
     nodeShell: false
   proxy: null

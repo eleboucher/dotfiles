@@ -102,6 +102,18 @@
           "tool_call": true,
           "modalities": { "input": ["text", "image"], "output": ["text"] }
         },
+        "neuralwatt/glm-5.2-short-fast-flex": {
+          "name": "neuralwatt/glm-5.2-short-fast-flex",
+          "limit": { "context": 199984, "output": 131072 },
+          "tool_call": true,
+          "modalities": { "input": ["text"], "output": ["text"] }
+        },
+        "neuralwatt/kimi-k2.6-flex": {
+          "name": "neuralwatt/kimi-k2.6-flex",
+          "limit": { "context": 262128, "output": 131072 },
+          "tool_call": true,
+          "modalities": { "input": ["text", "image"], "output": ["text"] }
+        },
         "neuralwatt/kimi-k2.7-code": {
           "name": "neuralwatt/kimi-k2.7-code",
           "limit": { "context": 262128, "output": 131072 },
