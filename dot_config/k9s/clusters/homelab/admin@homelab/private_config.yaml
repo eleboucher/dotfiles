@@ -14,7 +14,7 @@ k9s:
       - home-assistant
       - volsync-system
   view:
-    active: v1/services all
+    active: v1/pods all
   featureGates:
     nodeShell: false
   proxy: null
