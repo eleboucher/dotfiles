@@ -1,0 +1,27 @@
+# ######## Toolkit backends ########
+export GDK_BACKEND='wayland,x11'
+export QT_QPA_PLATFORM='wayland;xcb'
+export SDL_VIDEODRIVER='wayland,x11,windows'
+export CLUTTER_BACKEND='wayland'
+export ELECTRON_OZONE_PLATFORM_HINT='auto'
+
+# ####### XDG specifications #######
+export XDG_CURRENT_DESKTOP=sway
+export XDG_SESSION_TYPE=wayland
+export XDG_SESSION_DESKTOP=sway
+
+# ############# Cursors ############
+export XCURSOR_THEME='Sweet-cursors'
+export XCURSOR_SIZE='24'
+
+# SwayFX only nags about the proprietary Nvidia DRM driver (it runs either
+# way); this suppresses the swaynag banner without overriding sway.desktop.
+export SWAY_UNSUPPORTED_GPU=true
+
+# ### NVIDIA VA-API video decode ###
+export LIBVA_DRIVER_NAME='nvidia'
+export NVD_BACKEND='direct'
+export MOZ_DISABLE_RDD_SANDBOX='1'
+
+# ############# Others #############
+export _JAVA_AWT_WM_NONREPARENTING=1
