@@ -11,3 +11,21 @@ layer = "top"  # sits below fullscreen windows so they auto-hide the bar (overla
 mode           = "dark"
 source         = "custom"
 custom_palette = "erwanleboucher-dev"
+
+# Idle behaviors. Noctalia drives these itself via ext_idle_notifier_v1 (there
+# is no swayidle/hypridle in this session); all three ship disabled by default,
+# which is why nothing was blanking or locking. Defaults for the rest of each
+# behavior come from the built-in config - see `noctalia config export full`.
+[idle.behavior.lock]
+enabled = true
+timeout = 600.0
+
+[idle.behavior.screen-off]
+enabled = true
+timeout = 660.0
+
+# lock-and-suspend stays disabled on purpose: idle-suspending this box hits the
+# NVIDIA suspend/lock crash (nvidia #472), and an unattended timeout is exactly
+# the case where you would not be there to recover it. Suspend by hand instead.
+[idle.behavior.lock-and-suspend]
+enabled = false
