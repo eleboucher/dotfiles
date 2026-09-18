@@ -7,5 +7,14 @@ Documentation=man:systemd.special(7)
 # is what uwsm does for us in a uwsm session; this target covers the plain
 # sway.desktop session so units like gammastep.service still start there.
 BindsTo=graphical-session.target
+# XDG autostart entries (~/.config/autostart/*.desktop) are turned into
+# app-*@autostart.service units by systemd-xdg-autostart-generator, pulled
+# in by xdg-desktop-autostart.target. uwsm starts that target for us; the
+# plain sway.desktop session has nothing that does, and the target also
+# sets RefuseManualStart, so bind it here the way uwsm does in
+# wayland-session-xdg-autostart@.target.
+BindsTo=xdg-desktop-autostart.target
+Before=xdg-desktop-autostart.target
+PropagatesStopTo=xdg-desktop-autostart.target
 Wants=graphical-session-pre.target
 After=graphical-session-pre.target
